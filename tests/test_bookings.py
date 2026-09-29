@@ -1,8 +1,8 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 
 def test_create_booking_uses_server_side_price(client, user_headers, offering):
-    when = (datetime.now(timezone.utc) + timedelta(days=1)).isoformat()
+    when = (datetime.now(UTC) + timedelta(days=1)).isoformat()
     r = client.post(
         "/bookings/",
         json={**offering, "appointment_at": when, "amount": "1.00"},  # client-sent amount is ignored
@@ -14,18 +14,18 @@ def test_create_booking_uses_server_side_price(client, user_headers, offering):
 
 
 def test_booking_requires_auth(client, offering):
-    when = (datetime.now(timezone.utc) + timedelta(days=1)).isoformat()
+    when = (datetime.now(UTC) + timedelta(days=1)).isoformat()
     assert client.post("/bookings/", json={**offering, "appointment_at": when}).status_code == 401
 
 
 def test_past_appointment_rejected(client, user_headers, offering):
-    when = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
+    when = (datetime.now(UTC) - timedelta(days=1)).isoformat()
     r = client.post("/bookings/", json={**offering, "appointment_at": when}, headers=user_headers)
     assert r.status_code == 422
 
 
 def test_centre_not_offering_test_is_404(client, user_headers, offering):
-    when = (datetime.now(timezone.utc) + timedelta(days=1)).isoformat()
+    when = (datetime.now(UTC) + timedelta(days=1)).isoformat()
     r = client.post(
         "/bookings/",
         json={"centre_id": offering["centre_id"], "test_id": 9999, "appointment_at": when},

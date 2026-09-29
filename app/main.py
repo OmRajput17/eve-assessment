@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-import app.models  # noqa: F401  (registers all tables on Base.metadata)
+import app.models
 from app.api.routes import auth, bookings, catalog, payments
 from app.core.exceptions import AppError
 from app.core.logging import configure_logging

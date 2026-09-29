@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy.orm import Session
 
@@ -18,7 +18,7 @@ class BookingService:
     def create(self, user: User, data: BookingCreate) -> Booking:
         if data.appointment_at.tzinfo is None:
             raise DomainValidationError("appointment_at must include a timezone offset")
-        if data.appointment_at <= datetime.now(timezone.utc):
+        if data.appointment_at <= datetime.now(UTC):
             raise DomainValidationError("appointment_at must be in the future")
 
         offering = self._catalog.get_offering(data.centre_id, data.test_id)

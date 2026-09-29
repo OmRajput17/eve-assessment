@@ -1,15 +1,15 @@
-from pydantic.deprecated.parse import load_file
 import json
 import logging
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+
 
 class JsonFormatter(logging.Formatter):
     """Structured logs: one JSON object per line, easy to ship to any log stack."""
 
     def format(self, record: logging.LogRecord) -> str:
         entry = {
-            "ts": datetime.now(timezone.utc).isoformat(),
+            "ts": datetime.now(UTC).isoformat(),
             "level": record.levelname,
             "logger": record.name,
             "message": record.getMessage(),

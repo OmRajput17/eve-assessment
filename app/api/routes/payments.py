@@ -2,7 +2,12 @@ from fastapi import APIRouter, Depends, status
 
 from app.api.deps import get_current_user, get_payment_service, verify_webhook_signature
 from app.models import User
-from app.schemas.payment import PaymentCreate, PaymentOut, WebhookPayload, WebhookResponse
+from app.schemas.payment import (
+    PaymentCreate,
+    PaymentOut,
+    WebhookPayload,
+    WebhookResponse,
+)
 from app.services.payment import PaymentService
 
 router = APIRouter(prefix="/payments", tags=["payments"])

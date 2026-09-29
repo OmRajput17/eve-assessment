@@ -2,7 +2,11 @@ from fastapi import APIRouter, Depends, Query, status
 
 from app.api.deps import get_catalog_service, require_admin
 from app.schemas.catalog import (
-    CentreCreate, CentreOut, OfferingCreate, TestCreate, TestOut,
+    CentreCreate,
+    CentreOut,
+    OfferingCreate,
+    TestCreate,
+    TestOut,
 )
 from app.schemas.common import Pagination
 from app.services.catalog import CatalogService

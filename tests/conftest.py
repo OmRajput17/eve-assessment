@@ -8,7 +8,7 @@ os.environ["WEBHOOK_SECRET"] = "test-webhook-secret"
 import hashlib
 import hmac
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import pytest
 from fastapi.testclient import TestClient
@@ -16,7 +16,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-import app.models  # noqa: F401
+import app.models
 from app.db.base import Base
 from app.db.session import get_db
 from app.main import app
@@ -83,7 +83,7 @@ def offering(client, admin_headers) -> dict:
 
 @pytest.fixture()
 def booking(client, user_headers, offering) -> dict:
-    when = (datetime.now(timezone.utc) + timedelta(days=2)).isoformat()
+    when = (datetime.now(UTC) + timedelta(days=2)).isoformat()
     resp = client.post("/bookings/", json={**offering, "appointment_at": when}, headers=user_headers)
     assert resp.status_code == 201
     return resp.json()
