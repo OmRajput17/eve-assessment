@@ -1,3 +1,5 @@
+[tool.uv]
+package = false
 [project]
 name = "eve-assessment"
 version = "0.1.0"
@@ -19,13 +21,6 @@ dependencies = [
     "sqlalchemy>=2.1.1",
     "uvicorn>=0.54.0",
 ]
-
-[project.scripts]
-eve-assessment = "eve_assessment:main"
-
-[build-system]
-requires = ["uv_build>=0.12.1,<0.13.0"]
-build-backend = "uv_build"
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
