@@ -266,6 +266,32 @@ The test suite also runs automatically on every push via GitHub Actions — see 
 
 ---
 
+## Testing Admin Endpoints (Live Deployment)
+
+Admin access is granted automatically to any user who signs up with an email listed in the `ADMIN_EMAILS` environment variable — there is no manual role-assignment step. On the live deployment, this list includes a neutral demo address so a reviewer can self-serve admin access without needing anyone's personal credentials:
+
+```
+ADMIN_EMAILS=["demo-admin@example.com", ...]
+```
+
+To test admin-only endpoints (creating centres, tests, and priced offerings), sign up with this exact email against the live API:
+
+```bash
+curl -X POST https://eve-assessment.onrender.com/auth/signup \
+  -H "Content-Type: application/json" \
+  -d '{"email":"demo-admin@example.com","full_name":"Demo Admin","password":"any-password-you-like"}'
+```
+
+Then log in to get a token, and use it for the admin routes exactly as shown in the [Example requests](#example-requests-curl) section above (just replace `localhost:8000` with `https://eve-assessment.onrender.com`):
+
+```bash
+curl -X POST https://eve-assessment.onrender.com/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"demo-admin@example.com","password":"any-password-you-like"}'
+```
+
+---
+
 ## Tech Stack
 
 - **Framework:** FastAPI
