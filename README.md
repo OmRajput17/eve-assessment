@@ -1,8 +1,17 @@
 # Diagnostic Booking & Payment Service
 
+![Tests](https://github.com/OmRajput17/eve-assessment/actions/workflows/tests.yml/badge.svg)
+
+**Live API:** https://eve-assessment.onrender.com  
+**Swagger docs:** https://eve-assessment.onrender.com/docs
+
+> Note: hosted on Render's free tier — the service sleeps after inactivity, so the first request may take 30–60 seconds to respond.
+
 A backend service for diagnostic test bookings and simulated payments, built with **FastAPI + SQLAlchemy 2.0 + PostgreSQL + JWT**.
 
 Built for the EVE Healthcare backend assessment.
+
+Dependencies are managed with [uv](https://docs.astral.sh/uv/) (`pyproject.toml` + `uv.lock`); install uv before following the run instructions below.
 
 ---
 
@@ -155,6 +164,9 @@ curl -X POST localhost:8000/payments/ -H "Authorization: Bearer $TOKEN" -H "Cont
 curl -X POST localhost:8000/payments/ -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
   -d '{"booking_id":1,"async_mode":true}'
 
+# Cancel a booking (no request body required)
+curl -X POST localhost:8000/bookings/1/cancel -H "Authorization: Bearer $TOKEN"
+
 # Simulate the provider calling the webhook (HMAC-SHA256 over the raw body)
 BODY='{"event_id":"evt_1001","provider_reference":"sim_xxx","status":"SUCCESS"}'
 SIG=$(printf '%s' "$BODY" | openssl dgst -sha256 -hmac "$WEBHOOK_SECRET" | awk '{print $2}')
@@ -249,6 +261,8 @@ uv run pytest -v
 - Booking state machine: every allowed and forbidden transition, tested in isolation with no database
 
 Tests run against an in-memory SQLite database, so no Postgres instance is required to run the suite. Row-level locking (`SELECT ... FOR UPDATE`) and the unique-constraint race protection on webhook events are real safeguards that apply on PostgreSQL in production/Docker use, though SQLite does not exercise the locking behavior itself.
+
+The test suite also runs automatically on every push via GitHub Actions — see the badge at the top of this file and the workflow definition at `.github/workflows/tests.yml`.
 
 ---
 
